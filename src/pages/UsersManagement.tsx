@@ -5,8 +5,8 @@ import moment from 'moment';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { USER_PAGE_LIMIT } from '@/common/constants';
-import { ConfirmBox } from '@/components/ConfirmBox';
-import { UpdateUserBox } from '@/components/UpdateUserBox';
+import { OrderEnum } from '@/common/enums/order.enum';
+import { ConfirmBox, UpdateUserBox } from '@/components';
 import { useAuth, useBoolean } from '@/hooks';
 import { UpdateUserPayload, User } from '@/services/user/user.dto';
 import { userKeys } from '@/services/user/user.query';
@@ -24,7 +24,16 @@ export const UsersManagement = () => {
 
   const { profile } = useAuth();
 
-  const userInstance = userKeys.list({ page, limit: USER_PAGE_LIMIT });
+  const userInstance = userKeys.list({
+    page,
+    limit: USER_PAGE_LIMIT,
+    sorts: [
+      {
+        field: 'createdAt',
+        order: OrderEnum.Desc,
+      },
+    ],
+  });
   const { data, refetch } = useQuery({ ...userInstance, enabled: !!profile });
 
   const { mutate: deleteMutation, isLoading: isDeleteUserLoading } = useMutation({

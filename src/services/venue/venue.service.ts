@@ -1,4 +1,5 @@
 import {
+  CreateVenueDto,
   SearchVenueQuery,
   SearchVenueResponse,
   UpdateVenuePayload,
@@ -10,12 +11,8 @@ import axiosInstance from '@/utils/axiosConfig';
 
 const venueService = {
   getAll: async (query: VenueQuery) => {
-    const { location } = query;
-
     const { data } = await axiosInstance.get<VenuesResponse>('/venues', {
-      params: {
-        location,
-      },
+      params: query,
     });
 
     return data;
@@ -39,10 +36,19 @@ const venueService = {
 
     return data.data;
   },
+  create: async (payload: CreateVenueDto) => {
+    const { data } = await axiosInstance.post<VenueResponse>('/venues', payload);
+
+    return data;
+  },
+
   update: async ({ id, data: updateVenueData }: UpdateVenuePayload) => {
     const { data } = await axiosInstance.put<VenueResponse>(`/venues/${id}`, updateVenueData);
 
     return data;
+  },
+  delete: async (id: number) => {
+    await axiosInstance.delete(`/venues/${id}`);
   },
 };
 

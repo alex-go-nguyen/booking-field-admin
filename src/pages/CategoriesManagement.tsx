@@ -5,8 +5,7 @@ import moment from 'moment';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { OrderEnum } from '@/common/enums/order.enum';
-import { AddPitchCategoryBox, UpdatePitchCategoryBox } from '@/components';
-import { ConfirmBox } from '@/components/ConfirmBox';
+import { AddPitchCategoryBox, UpdatePitchCategoryBox, ConfirmBox } from '@/components';
 import { useBoolean } from '@/hooks';
 import {
   PitchCategoriesResponse,

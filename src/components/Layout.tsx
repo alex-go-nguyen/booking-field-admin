@@ -83,6 +83,7 @@ export const MainLayout = () => {
     { pathname: '/', label: 'Dashboard' },
     { pathname: '/categories', label: 'Categories' },
     { pathname: '/users', label: 'Users' },
+    { pathname: '/venues', label: 'Venues' },
   ];
 
   return (
@@ -142,6 +143,12 @@ export const MainLayout = () => {
               <Category />
             </ListItemIcon>
             <ListItemText primary='Categories' />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate('/venues')}>
+            <ListItemIcon>
+              <Category />
+            </ListItemIcon>
+            <ListItemText primary='Venues' />
           </ListItemButton>
           <ListItemButton onClick={logout}>
             <ListItemIcon>

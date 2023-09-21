@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { MainLayout } from './components';
-import { CategoriesManagement, Dashboard, Login, UsersManagement } from './pages';
+import { CategoriesManagement, Dashboard, Login, UsersManagement, VenuesManagement } from './pages';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import '@fontsource/roboto/300.css';
@@ -27,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: 'categories',
         element: <CategoriesManagement />,
+      },
+      {
+        path: 'venues',
+        element: <VenuesManagement />,
       },
     ],
   },

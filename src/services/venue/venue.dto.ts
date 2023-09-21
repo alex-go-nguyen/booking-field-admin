@@ -1,5 +1,6 @@
 import { Pitch } from '../pitch/pitch.dto';
 import { Rating } from '../rating/rating.dto';
+import { User } from '../user/user.dto';
 import { BaseData, BasePaginationResponse, BaseResponse, PaginationQuery, SortQuery } from '@/common/dtos/base.dto';
 
 export type VenuesResponse = BasePaginationResponse<Venue>;
@@ -44,6 +45,7 @@ export type Venue = {
   openAt: string;
   closeAt: string;
   slug: string;
+  user: User;
 } & BaseData;
 
 export type LocationMap = {
@@ -67,5 +69,16 @@ export type VenueImage = {
 };
 
 export type VenueQuery = {
-  location: string;
+  location?: string;
+};
+
+export type CreateVenueDto = {
+  name: string;
+  description: string;
+  province: string;
+  district: string;
+  address: string;
+  openAt: string;
+  closeAt: string;
+  user: number;
 };
