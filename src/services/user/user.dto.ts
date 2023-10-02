@@ -50,4 +50,5 @@ export type GetAnalystUserData = {
 
 export type GetAllUsersQuery = {
   role?: RoleEnum;
+  keyword?: string;
 } & BaseQuery;

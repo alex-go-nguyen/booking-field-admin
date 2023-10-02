@@ -17,16 +17,16 @@ declare module '@mui/material/styles' {
 export const theme = createTheme({
   palette: {
     primary: {
-      light: '#ff8a3f',
-      main: '#ff6400',
-      dark: '#d95500',
+      light: '#90EE90',
+      main: '#228B22',
+      dark: '#2E8B57',
       contrastText: '#fff',
     },
     secondary: {
       light: '#ddd',
       main: '#333',
       dark: '#000',
-      contrastText: '#fff',
+      contrastText: '#EDF5E1',
     },
     error: {
       light: red[500],
@@ -44,6 +44,12 @@ export const theme = createTheme({
       light: '#ddd',
       main: '#333',
       dark: '#000',
+      contrastText: '#fff',
+    },
+    success: {
+      light: '#3cef84',
+      main: '#05f766',
+      dark: '#00c34e',
       contrastText: '#fff',
     },
   },

@@ -5,3 +5,5 @@ export * from './UpdatePitchCategoryBox';
 export * from './ConfirmBox';
 export * from './UpdateUserBox';
 export * from './AddVenueBox';
+export * from './UpdateVenueBox';
+export * from './NoData';

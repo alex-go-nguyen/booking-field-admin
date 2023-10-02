@@ -31,11 +31,6 @@ const venueService = {
 
     return data;
   },
-  getByUser: async (userId: number) => {
-    const { data } = await axiosInstance.get<VenueResponse>(`/venues/user/${userId}`);
-
-    return data.data;
-  },
   create: async (payload: CreateVenueDto) => {
     const { data } = await axiosInstance.post<VenueResponse>('/venues', payload);
 
