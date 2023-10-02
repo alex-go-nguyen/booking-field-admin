@@ -1,4 +1,4 @@
-import { Category, ChevronLeft, Dashboard, LogoutOutlined, Menu as MenuIcon, People } from '@mui/icons-material';
+import { Category, ChevronLeft, Dashboard, Grass, LogoutOutlined, Menu as MenuIcon, People } from '@mui/icons-material';
 import {
   IconButton,
   Toolbar,
@@ -79,11 +79,11 @@ export const MainLayout = () => {
 
   const { pathname } = useLocation();
 
-  const headings = [
-    { pathname: '/', label: 'Dashboard' },
-    { pathname: '/categories', label: 'Categories' },
-    { pathname: '/users', label: 'Users' },
-    { pathname: '/venues', label: 'Venues' },
+  const menuItems = [
+    { pathname: '/', label: 'Dashboard', icon: <Dashboard /> },
+    { pathname: '/categories', label: 'Categories', icon: <Category /> },
+    { pathname: '/users', label: 'Users', icon: <People /> },
+    { pathname: '/venues', label: 'Venues', icon: <Grass /> },
   ];
 
   return (
@@ -107,7 +107,7 @@ export const MainLayout = () => {
             <MenuIcon />
           </IconButton>
           <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
-            {headings.find((item) => item.pathname === pathname)?.label}
+            {menuItems.find((item) => item.pathname === pathname)?.label}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -126,30 +126,12 @@ export const MainLayout = () => {
         </Toolbar>
         <Divider />
         <List component='nav'>
-          <ListItemButton onClick={() => navigate('/')}>
-            <ListItemIcon>
-              <Dashboard />
-            </ListItemIcon>
-            <ListItemText primary='Dashboard' />
-          </ListItemButton>
-          <ListItemButton onClick={() => navigate('/users')}>
-            <ListItemIcon>
-              <People />
-            </ListItemIcon>
-            <ListItemText primary='Users' />
-          </ListItemButton>
-          <ListItemButton onClick={() => navigate('/categories')}>
-            <ListItemIcon>
-              <Category />
-            </ListItemIcon>
-            <ListItemText primary='Categories' />
-          </ListItemButton>
-          <ListItemButton onClick={() => navigate('/venues')}>
-            <ListItemIcon>
-              <Category />
-            </ListItemIcon>
-            <ListItemText primary='Venues' />
-          </ListItemButton>
+          {menuItems.map((item) => (
+            <ListItemButton onClick={() => navigate(item.pathname)}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.label} />
+            </ListItemButton>
+          ))}
           <ListItemButton onClick={logout}>
             <ListItemIcon>
               <LogoutOutlined />

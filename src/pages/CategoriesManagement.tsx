@@ -1,12 +1,23 @@
-import { Delete, Edit } from '@mui/icons-material';
-import { Box, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Settings } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { OrderEnum } from '@/common/enums/order.enum';
-import { AddPitchCategoryBox, UpdatePitchCategoryBox, ConfirmBox } from '@/components';
-import { useBoolean } from '@/hooks';
+import { AddPitchCategoryBox, UpdatePitchCategoryBox, ConfirmBox, NoData } from '@/components';
+import { useBoolean, useMenu } from '@/hooks';
 import {
   PitchCategoriesResponse,
   PitchCategory,
@@ -27,7 +38,7 @@ export const CategoriesManagement = () => {
     ],
   });
 
-  const { data, refetch } = useQuery(pitchCategoryInstance);
+  const { data: categories, refetch: refetchCategories } = useQuery(pitchCategoryInstance);
 
   const [selectedPitchCategory, setSelectedPitchCategory] = useState<PitchCategory | null>(null);
 
@@ -35,10 +46,12 @@ export const CategoriesManagement = () => {
   const { value: isOpenUpdateBox, setTrue: openUpdateBox, setFalse: closeUpdateBox } = useBoolean(false);
   const { value: isOpenAddBox, setTrue: openAddBox, setFalse: closeAddBox } = useBoolean(false);
 
+  const { anchorEl, onOpen, onClose, isOpen } = useMenu();
+
   const { mutate: deleteMutation, isLoading: isDeleteLoading } = useMutation({
     mutationFn: (id: number) => pitchCategoryService.delete(id),
     onSuccess: () => {
-      refetch();
+      refetchCategories();
       closeConfirmBox();
       toast.success('Delete pitch category successfully!');
     },
@@ -69,7 +82,7 @@ export const CategoriesManagement = () => {
       <Button variant='contained' onClick={openAddBox}>
         Add
       </Button>
-      {data && (
+      {categories && (
         <>
           <Table size='medium' sx={{ marginY: 2 }}>
             <TableHead>
@@ -83,7 +96,7 @@ export const CategoriesManagement = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.data.map((pitchCategory) => (
+              {categories.data.map((pitchCategory) => (
                 <TableRow key={pitchCategory.id}>
                   <TableCell>{pitchCategory.id}</TableCell>
                   <TableCell>{pitchCategory.name}</TableCell>
@@ -100,30 +113,48 @@ export const CategoriesManagement = () => {
                   <TableCell>{moment(pitchCategory.createdAt).format('MM/DD/YYYY')}</TableCell>
                   <TableCell>
                     <IconButton
-                      onClick={() => {
+                      onClick={(e) => {
                         setSelectedPitchCategory(pitchCategory);
-                        openUpdateBox();
+                        onOpen(e);
                       }}
-                      color='secondary'
                     >
-                      <Edit />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        openConfirmBox();
-                        setSelectedPitchCategory(pitchCategory);
-                      }}
-                      color='primary'
-                    >
-                      <Delete />
+                      <Settings />
                     </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+          {categories.data.length <= 0 && <NoData />}
 
-          {selectedPitchCategory && (
+          <Menu
+            id='category-menu'
+            anchorEl={anchorEl}
+            open={isOpen}
+            onClose={onClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+                onClose();
+                openUpdateBox();
+              }}
+            >
+              Update
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                onClose();
+                openConfirmBox();
+              }}
+            >
+              Delete
+            </MenuItem>
+          </Menu>
+
+          {selectedPitchCategory && isOpenUpdateBox && (
             <UpdatePitchCategoryBox
               isLoading={isUpdateLoading}
               onSubmit={handleUpdateSubmit}

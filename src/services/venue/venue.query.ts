@@ -5,7 +5,7 @@ import { defineQuery } from '@/utils/defineQuery';
 export const venueKeys = {
   all: ['venues'] as const,
   lists: () => [...venueKeys.all, 'list'] as const,
-  list: (query: VenueQuery) => defineQuery([...venueKeys.lists(), query], () => venueService.getAll(query)),
+  list: (query: VenueQuery = {}) => defineQuery([...venueKeys.lists(), query], () => venueService.getAll(query)),
   details: () => [venueKeys.all, 'detail'] as const,
   detail: (slug?: string) =>
     defineQuery([...venueKeys.details(), slug], () => {

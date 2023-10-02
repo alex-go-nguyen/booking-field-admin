@@ -1,29 +1,30 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import * as io from 'socket.io-client';
 import { LoginInput } from '@/services/auth/auth.dto';
 import authService from '@/services/auth/auth.service';
 import { userKeys } from '@/services/user/user.query';
 
 export const useAuth = () => {
-  const navigate = useNavigate();
+  const [accessToken, setAccessToken] = useState<string | undefined>(Cookies.get('access_token'));
 
   const userInstance = userKeys.profile();
-  const { data: profile, isLoading, refetch } = useQuery(userInstance);
+  const { data: profile, isLoading, refetch } = useQuery({ ...userInstance, staleTime: Infinity });
+
+  const [socket, setSocket] = useState<io.Socket>();
 
   const {
     mutate: loginMutation,
     isLoading: loginLoading,
     isError: loginError,
   } = useMutation({
-    mutationFn: (payload: LoginInput) => authService.login(payload),
-    onSuccess: () => {
-      refetch();
-      navigate('/');
+    mutationFn: authService.login,
+    onSuccess: ({ data }) => {
       toast.success('Login successfully');
-    },
-    onError: () => {
-      toast.error('Login with admin role failed');
+      refetch();
+      setAccessToken(data.accessToken);
     },
   });
 
@@ -33,9 +34,23 @@ export const useAuth = () => {
 
   function logout() {
     authService.logout();
-    toast.success('Logout successfully');
+    socket?.disconnect();
     refetch();
+    toast.success('Logout successfully');
   }
 
-  return { profile, login, logout, isLoading, loginLoading, loginError, refetch };
+  useEffect(() => {
+    if (accessToken) {
+      const newSocket = io.connect(`${import.meta.env.VITE_SOCKET_API_URL}`, {
+        extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        // withCredentials: true,
+      });
+
+      setSocket(newSocket);
+    }
+  }, [accessToken]);
+
+  return { profile, login, logout, isLoading, loginLoading, loginError, refetch, socket };
 };

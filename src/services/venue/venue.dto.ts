@@ -1,7 +1,14 @@
 import { Pitch } from '../pitch/pitch.dto';
 import { Rating } from '../rating/rating.dto';
 import { User } from '../user/user.dto';
-import { BaseData, BasePaginationResponse, BaseResponse, PaginationQuery, SortQuery } from '@/common/dtos/base.dto';
+import {
+  BaseData,
+  BasePaginationResponse,
+  BaseQuery,
+  BaseResponse,
+  PaginationQuery,
+  SortQuery,
+} from '@/common/dtos/base.dto';
 
 export type VenuesResponse = BasePaginationResponse<Venue>;
 export type VenueResponse = BaseResponse<Venue>;
@@ -46,7 +53,14 @@ export type Venue = {
   closeAt: string;
   slug: string;
   user: User;
+  status: VenueStatusEnum;
 } & BaseData;
+
+export enum VenueStatusEnum {
+  Active = 'active',
+  Waiting = 'waiting',
+  Cancel = 'cancel',
+}
 
 export type LocationMap = {
   lat: number;
@@ -69,8 +83,10 @@ export type VenueImage = {
 };
 
 export type VenueQuery = {
-  location?: string;
-};
+  userId?: number;
+  status?: VenueStatusEnum;
+  keyword?: string;
+} & BaseQuery;
 
 export type CreateVenueDto = {
   name: string;

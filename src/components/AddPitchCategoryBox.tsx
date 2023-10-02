@@ -49,8 +49,6 @@ export const AddPitchCategoryBox = ({ isOpen, onClose }: AddPitchCategoryBoxProp
     field: { value: thumbnail },
   } = useController({ control, name: 'thumbnail' });
 
-  console.log(getValues('thumbnail'));
-
   return (
     <Modal
       open={isOpen}
