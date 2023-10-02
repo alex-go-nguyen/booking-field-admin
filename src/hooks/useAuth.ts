@@ -45,7 +45,7 @@ export const useAuth = () => {
         extraHeaders: {
           Authorization: `Bearer ${accessToken}`,
         },
-        // withCredentials: true,
+        withCredentials: true,
       });
 
       setSocket(newSocket);
